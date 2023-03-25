@@ -14,6 +14,7 @@
 # @author Jeff Geerling, 2014
 
 # Warn that some commands will not be run if the script is not run as root.
+os_vers=`sw_vers -productVersion`
 if [[ $EUID -ne 0 ]]; then
   RUN_AS_ROOT=false
   printf "Certain commands will not be run without sudo privileges. To run as root, run the same command prepended with 'sudo', for example: $ sudo $0\n\n" | fold -s -w 80
@@ -110,6 +111,11 @@ sudo pmset -a sms 0
 #defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
 #defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
 
+# Enable tap to click (Trackpad) for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
 # Increase sound quality for Bluetooth headphones/headsets
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
@@ -147,6 +153,7 @@ defaults write com.apple.screencapture location -string "${HOME}/Desktop"
 # Configure menu bar options
 defaults write com.apple.systemuiserver menuExtras -array "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/TextInput.menu"
 defaults write com.apple.menuextra.battery ShowPercent YES
+defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist BatteryShowPercentage -bool true
 
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
@@ -424,6 +431,18 @@ defaults write com.apple.messageshelper.MessageController SOInputLineSettings -d
 # Disable sensitive and senseless swipe-based navigation
 defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
 
+# Disable swipe between pages
+if [[ $os_vers =~ "10.7" ]] || [[ $os_vers =~ "10.8" ]];then
+    su -l $3 -c "defaults write NSGlobalDomain AppleEnableSwipeNavigateWithScrolls -bool false"
+    su -l $3 -c "defaults -currentHost write NSGlobalDomain com.apple.trackpad.threeFingerHorizSwipeGesture -int 0"
+    su -l $3 -c "defaults -currentHost write NSGlobalDomain com.apple.trackpad.fourFingerHorizSwipeGesture -int 0"
+    su -l $3 -c "defaults -currentHost write NSGlobalDomain com.apple.trackpad.threeFingerVertSwipeGesture -int 0"
+    su -l $3 -c "defaults -currentHost write NSGlobalDomain com.apple.trackpad.fourFingerVertSwipeGesture -int 0"
+fi
+if [[ $os_vers =~ "10.8" ]];then
+    su -l $3 -c "defaults -currentHost write NSGlobalDomain com.apple.trackpad.twoFingerFromRightEdgeSwipeGesture -int 0"
+fi
+
 # Use the system print dialog
 defaults write com.google.Chrome DisablePrintPreview -bool true
 
@@ -463,5 +482,5 @@ fi
 printf "Please log out and log back in to make all settings take effect.\n"
 
 # Make "fish" a default shell
-echo "/opt/homebrew/bin/fish" | sudo tee -a /etc/shells
-chsh -s /opt/homebrew/bin/fish
+echo "/Users/skarppion101/homebrew/bin/fish" | sudo tee -a /etc/shells
+chsh -s /Users/skarppion101/homebrew/bin/fish
