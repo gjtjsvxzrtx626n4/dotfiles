@@ -384,6 +384,12 @@ killall mds > /dev/null 2>&1
 # Terminal                                                                    #
 ###############################################################################
 
+# Specify the preferences directory
+defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.config/iterm2/settings"
+
+# Tell iTerm2 to use the custom preferences in the directory
+defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+
 # Only use UTF-8 in Terminal.app
 defaults write com.apple.terminal StringEncodings -array 4
 
