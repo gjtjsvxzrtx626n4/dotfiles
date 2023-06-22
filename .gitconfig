@@ -1,16 +1,29 @@
 [user]
   name = "skarppion101"
   email = "skarppi@mail.ru"
+
 [core]
-  editor = nano
+  editor = n ano
   excludesfile = ~/.gitignore
   autocrlf = input
+
 [color]
   branch = auto
   diff = auto
   interactive = auto
   status = auto
+
 [web]
   browser = google-chrome
+
 [push]
   default = simple
+
+[pull]
+  rebase = false
+
+[init]
+  defaultBranch = master
+
+[hub]
+  protocol = ssh

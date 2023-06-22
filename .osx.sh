@@ -337,9 +337,11 @@ defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
 defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
 
 # Enable the Develop menu and the Web Inspector in Safari
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
+defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
 # Add a context menu item for showing the Web Inspector in web views
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
@@ -394,8 +396,9 @@ defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
 # Only use UTF-8 in Terminal.app
 defaults write com.apple.terminal StringEncodings -array 4
 
-# Enable the "Anywhere" option
-sudo spctl --master-disable
+# Make "fish" a default shell
+echo "$HOME/homebrew/bin/fish" | sudo tee -a /etc/shells
+chsh -s $HOME/homebrew/bin/fish
 
 ###############################################################################
 # Activity Monitor                                                            #
@@ -460,6 +463,12 @@ defaults write com.google.Chrome DisablePrintPreview -bool true
 # Common                                                                      #
 ###############################################################################
 
+# Disable the “Are you sure you want to open this application?” dialog
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+# Enable the "Anywhere" option
+sudo spctl --master-disable
+
 # Disable animations when opening a Quick Look window
 defaults write -g QLPanelAnimationDuration -float 0
 
@@ -490,7 +499,3 @@ if [[ ! ($* == *--no-restart*) ]]; then
 fi
 
 printf "Please log out and log back in to make all settings take effect.\n"
-
-# Make "fish" a default shell
-echo "/Users/skarppion101/homebrew/bin/fish" | sudo tee -a /etc/shells
-chsh -s /Users/skarppion101/homebrew/bin/fish
