@@ -3,7 +3,7 @@
   email = "skarppi@mail.ru"
 
 [core]
-  editor = n ano
+  editor = nano
   excludesfile = ~/.gitignore
   autocrlf = input
 
